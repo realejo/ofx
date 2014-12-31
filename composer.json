@@ -1,0 +1,15 @@
+{
+  "name" : "realejo/ofx",
+  "description" : "OFX parser",
+  "homepage": "http://realejo.com.br",
+  "version" : "1.0",
+  "authors" : [ {
+    "name" : "Rodrigo Capilé",
+    "email" : "rcapile@gmail.com"
+  } ],
+  "autoload": {
+        "psr-0": {
+            "Realejo\\": "src/"
+        }
+    }
+}
