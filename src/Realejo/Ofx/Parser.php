@@ -52,13 +52,9 @@ class Parser
         }
 
         // Cria o XML
-        // Cria usando o DOM para corrigir os
-        $xml = new \DomDocument();
-        $xml->recover=true;
-        $xml->loadXML($xmlContent);
-        $xml = simplexml_import_dom($xml);
+        $xml = $this->makeXML($xmlContent);
 
-        $ofx->setSignon($this->parseSignon());
+        $ofx->setSignOn($this->parseSignOn());
 
         //$ofx->setSignup($this->parseSignup());
 
@@ -83,15 +79,38 @@ class Parser
         return $ofx;
     }
 
-    public function parseHeaders($string)
+    public function parseHeaders($content)
     {
         $headers = array();
-        $string = explode("\n", trim($string));
-        foreach($string as $h) {
+        $content = explode("\n", trim($content));
+        foreach($content as $h) {
             list($key,$value) = explode(':', trim($h));
             $headers[trim($key)] = trim($value);
         }
 
         return $headers;
+    }
+
+    /**
+     * Cria um XML a partir de um string, mesmo com tags incompletas
+     *
+     * @param string $content
+     *
+     * @return SimpleXMLElement
+     */
+    public static function makeXML($content)
+    {
+        $xml = new \DomDocument();
+        $xml->recover=true;
+        $xml->loadXML($content);
+        return simplexml_import_dom($xml);
+    }
+
+    /**
+     * @param string $date
+     */
+    public static function parseDate($date)
+    {
+        return $date;
     }
 }
