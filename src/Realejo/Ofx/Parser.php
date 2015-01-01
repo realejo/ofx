@@ -54,11 +54,11 @@ class Parser
         // Cria o XML
         $xml = $this->makeXML($xmlContent);
 
-        $ofx->setSignOn($this->parseSignOn());
+        $ofx->setSignOn(SignOn::parse($xml));
 
         //$ofx->setSignup($this->parseSignup());
 
-        //$ofx->setBanking($this->parseBanking());
+        $ofx->setBanking(Banking::parse($xml));
 
         //$ofx->setCreditcard($this->parseCreditcard());
 

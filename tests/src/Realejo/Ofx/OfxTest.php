@@ -69,7 +69,7 @@ class OfxTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests Ofx->getSignOn()
+     * Tests Getters ans Setters
      */
     public function testSettersGetters()
     {

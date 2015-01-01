@@ -72,26 +72,38 @@ class SignOn
 
         $SignOn = new SignOn();
 
-        // Verifica se exite a seção do Signon
-        $request  = $content->xpath('//SIGNONMSGSRSV1/SONRQ');
-        $SONRS = $content->xpath('//SIGNONMSGSRSV1/SONRS');
-        if (count($SONRS) == 1) {
-            $SONRS = $SONRS[0];
+        // Verifica se existe o bloco de SignOn
+        $SIGNONMSGSRSV1 = $content->xpath('//SIGNONMSGSRSV1');
+        if (count($SIGNONMSGSRSV1) == 1) {
 
-            $response = new SignOnResponse();
+            // Verifica se exite a seção do request Signon
+            $SONRQ = $content->xpath('//SIGNONMSGSRSV1/SONRQ');
+            if (count($SONRQ) == 1) {
+                throw new \Exception('Signon request not implemented');
+            }
 
-            $response->statusCode     = (int) $SONRS->STATUS->CODE;
-            $response->statusSeverity = $SONRS->STATUS->SEVERITY;
+            // Verifica se exite a seção do response Signon
+            $SONRS = $content->xpath('//SIGNONMSGSRSV1/SONRS');
+            if (count($SONRS) == 1) {
+                $SONRS = $SONRS[0];
 
-            $response->date = \Realejo\Ofx\Parser::parseDate($SONRS->DTSERVER);
+                $response = new SignOnResponse();
 
-            $response->language = $SONRS->LANGUAGE;
+                $response->statusCode     = (int) $SONRS->STATUS->CODE;
+                $response->statusSeverity = $SONRS->STATUS->SEVERITY;
 
-            $response->fiOrganization = \Realejo\Ofx\Parser::parseDate($SONRS->FI->ORG);
-            $response->fiUniqueId     = \Realejo\Ofx\Parser::parseDate($SONRS->FI->FID);
+                $response->date = \Realejo\Ofx\Parser::parseDate($SONRS->DTSERVER);
 
-            $SignOn->setResponse($response);
-        }
+                $response->language = $SONRS->LANGUAGE;
+
+                $response->fiOrganization = \Realejo\Ofx\Parser::parseDate($SONRS->FI->ORG);
+                $response->fiUniqueId     = \Realejo\Ofx\Parser::parseDate($SONRS->FI->FID);
+
+                $SignOn->setResponse($response);
+
+            }// end if (count($SONRS) == 1)
+
+        } //end if (count($SIGNONMSGSRSV1) == 1)
 
         return $SignOn;
     }
