@@ -1,7 +1,18 @@
 {
   "name" : "realejo/ofx",
   "description" : "OFX parser",
-  "homepage": "http://realejo.com.br",
+  "type" : "library",
+    "license" : "Unlicense",
+    "homepage" : "http://realejo.com.br",
+    "keywords": [
+        "realejo",
+        "ofx",
+        "php",
+        "banking"
+    ],
+    "require": {
+        "php": ">=5.4"
+    },
   "version" : "1.0",
   "authors" : [ {
     "name" : "Rodrigo Capilé",
