@@ -19,7 +19,7 @@
     "email" : "rcapile@gmail.com"
   } ],
   "autoload": {
-        "psr-0": {
+        "psr-4": {
             "Realejo\\": "src/"
         }
     }
