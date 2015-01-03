@@ -96,8 +96,8 @@ class SignOn
 
                 $response->language = $SONRS->LANGUAGE;
 
-                $response->fiOrganization = \Realejo\Ofx\Parser::parseDate($SONRS->FI->ORG);
-                $response->fiUniqueId     = \Realejo\Ofx\Parser::parseDate($SONRS->FI->FID);
+                $response->fiOrganization = $SONRS->FI->ORG;
+                $response->fiUniqueId     = $SONRS->FI->FID;
 
                 $SignOn->setResponse($response);
 

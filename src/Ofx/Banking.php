@@ -103,11 +103,11 @@ class Banking
                             $transaction = new Transaction();
 
                             $transaction->type = $S->TRNTYPE;
-                            $transaction->datePosted = $S->DTPOSTED;
-                            $transaction->dateUser = $S->DTUSER;
-                            $transaction->dateAvalilable = $S->DTAVAIL;
+                            $transaction->datePosted = Parser::parseDate($S->DTPOSTED);
+                            $transaction->dateUser = Parser::parseDate($S->DTUSER);
+                            $transaction->dateAvalilable = Parser::parseDate($S->DTAVAIL);
 
-                            $transaction->amount = $S->TRNAMT;
+                            $transaction->amount = (float) $S->TRNAMT;
                             $transaction->fitId = $S->FITID;
                             $transaction->correctFitId = $S->CORRECTFITID;
                             $transaction->correctAction = $S->CORRECTACTION;

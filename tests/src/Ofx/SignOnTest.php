@@ -85,7 +85,7 @@ class SignOnTest extends PHPUnit_Framework_TestCase
         $this->assertNotNull($signon->getResponse()->statusCode);
         $this->assertEquals(0, $signon->getResponse()->statusCode);
         $this->assertEquals('INFO', $signon->getResponse()->statusSeverity);
-        $this->assertEquals('20141230120000[-3:BRT]', $signon->getResponse()->date);
+        $this->assertEquals('2014-12-30', $signon->getResponse()->date->format('Y-m-d'));
         $this->assertEquals('POR', $signon->getResponse()->language);
         $this->assertEquals('Banco do Brasil', $signon->getResponse()->fiOrganization);
         $this->assertEquals('1', $signon->getResponse()->fiUniqueId);
@@ -100,7 +100,7 @@ class SignOnTest extends PHPUnit_Framework_TestCase
         $this->assertNotNull($signon->getResponse()->statusCode);
         $this->assertEquals(0, $signon->getResponse()->statusCode);
         $this->assertEquals('INFO', $signon->getResponse()->statusSeverity);
-        $this->assertEquals('20141230120000[-3:BRT]', $signon->getResponse()->date);
+        $this->assertEquals('2014-12-30', $signon->getResponse()->date->format('Y-m-d'));
         $this->assertEquals('POR', $signon->getResponse()->language);
         $this->assertEquals('Banco do Brasil', $signon->getResponse()->fiOrganization);
         $this->assertEquals('1', $signon->getResponse()->fiUniqueId);

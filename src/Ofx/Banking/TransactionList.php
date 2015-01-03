@@ -3,10 +3,15 @@ namespace Realejo\Ofx\Banking;
 
 class TransactionList extends \ArrayIterator
 {
+    /**
+     * @var \DateTime
+     */
     public $dateStart;
-    public $dateEnd;
 
-    private $_transactions = array();
+    /**
+     * @var \DateTime
+     */
+    public $dateEnd;
 
     /**
      * Bloqueia a inclusão de objetos que não seja do tipo Transaction

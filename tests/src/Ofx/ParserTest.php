@@ -106,4 +106,25 @@ class ParserTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('USASCII', $ofx->getHeader('ENCODING'), 'campo ENCODING correto');
 
     }
+
+    public function testParseDate()
+    {
+        $this->assertNull($this->Parser->parseDate(null));
+        $this->assertNull($this->Parser->parseDate(''));
+
+        $this->assertInstanceOf('DateTime', $this->Parser->parseDate('20141031120000[-3:BRT]'));
+
+        $this->assertEquals('2014-10-31', $this->Parser->parseDate('20141031120000[-3:BRT]')->format('Y-m-d'));
+        $this->assertEquals('2014-10-31', $this->Parser->parseDate('20141031120000')->format('Y-m-d'));
+        $this->assertEquals('2014-10-31', $this->Parser->parseDate('20141031[-3:BRT]')->format('Y-m-d'));
+        $this->assertEquals('2014-10-31', $this->Parser->parseDate('20141031')->format('Y-m-d'));
+
+        $this->assertEquals('12:00:00', $this->Parser->parseDate('20141031120000[-3:BRT]')->format('h:i:s'));
+        $this->assertEquals('12:00:00', $this->Parser->parseDate('20141031120000[-3:BRT]')->format('H:i:s'));
+        $this->assertEquals('12:00:00', $this->Parser->parseDate('20141031120000')->format('h:i:s'));
+        $this->assertEquals('12:00:00', $this->Parser->parseDate('20141031120000')->format('H:i:s'));
+
+        $this->assertEquals('12:00:00', $this->Parser->parseDate('20141031120000.1234[-3:BRT]')->format('H:i:s'));
+        $this->assertEquals('12:00:00', $this->Parser->parseDate('20141031120000.1234')->format('H:i:s'));
+    }
 }

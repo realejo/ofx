@@ -143,14 +143,14 @@ class BankingTest extends PHPUnit_Framework_TestCase
 
         $transactionList = $response->getTransactionList();
         $this->assertInstanceOf('Realejo\Ofx\Banking\TransactionList', $transactionList);
-        $this->assertEquals('20141031120000[-3:BRT]', $transactionList->dateStart);
-        $this->assertEquals('20141130120000[-3:BRT]', $transactionList->dateEnd);
+        $this->assertEquals('2014-10-31', $transactionList->dateStart->format('Y-m-d'));
+        $this->assertEquals('2014-11-30', $transactionList->dateEnd->format('Y-m-d'));
 
         $this->assertCount(5, $transactionList);
 
         $transaction = $transactionList[0];
         $this->assertEquals('OTHER', $transaction->type);
-        $this->assertEquals('20141103120000[-3:BRT]', $transaction->datePosted);
+        $this->assertEquals('2014-11-03', $transaction->datePosted->format('Y-m-d'));
         $this->assertEquals('1234.45', $transaction->amount);
         $this->assertEquals('2014110305000000', $transaction->fitId);
         $this->assertEquals('855000028594', $transaction->checkNumber);
@@ -159,7 +159,7 @@ class BankingTest extends PHPUnit_Framework_TestCase
 
         $transaction = $transactionList[4];
         $this->assertEquals('OTHER', $transaction->type);
-        $this->assertEquals('20141103120000[-3:BRT]', $transaction->datePosted);
+        $this->assertEquals('2014-11-03', $transaction->datePosted->format('Y-m-d'));
         $this->assertEquals('456.78', $transaction->amount);
         $this->assertEquals('20141103117590', $transaction->fitId);
         $this->assertEquals('000000651888', $transaction->checkNumber);
