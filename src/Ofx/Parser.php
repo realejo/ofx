@@ -117,6 +117,8 @@ class Parser
             return null;
         }
 
+        $date = self::parseString($date);
+
         // remove o Timezone abreviation pois não consegue fazer o parse
         //@todo descobrir pq não faz!
         if (strpos($date, '[') !== false) {
@@ -136,5 +138,35 @@ class Parser
         }
         // Se não conseguiu em nenhuma das opções acima retorna false
         return false;
+    }
+
+    /**
+     * As vezes um elemente se estiver com quebra de linha, ele não processa direito
+     * Ex: <TAG>
+     * conteudo
+     * </TAG>
+     *
+     * retorna array('0'=>'
+     * conteudo
+     * ')
+     * @param string|array|SimpleXMLElement $content
+     *
+     * @return string
+     */
+    static public function parseString($content)
+    {
+        if (is_string($content)) {
+            return trim($content);
+        }
+
+        if (is_object($content)) {
+            $content = (array) $content;
+        }
+
+        if (is_array($content) and count($content) == 1) {
+            return trim($content[0]);
+        }
+
+        return null;
     }
 }

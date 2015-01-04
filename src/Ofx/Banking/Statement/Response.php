@@ -61,7 +61,7 @@ class Response
      *
      * @return CreditcardAccount
      */
-    public function getCredicardAccount()
+    public function getCreditcardAccount()
     {
         return $this->_creditcardAccount;
     }
@@ -72,7 +72,7 @@ class Response
      *
      * @return \Realejo\Ofx\Banking\Statement\Response
      */
-    public function setCredicardccount(BankAccount $creditcardAccount)
+    public function setCredicardccount(CreditcardAccount $creditcardAccount)
     {
         $this->_creditcardAccount = $creditcardAccount;
         return $this;

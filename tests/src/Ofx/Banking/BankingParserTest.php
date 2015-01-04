@@ -36,6 +36,25 @@ class BankingParserTest extends PHPUnit_Framework_TestCase
         parent::tearDown();
     }
 
+    public function testParseCredircardAccount()
+    {
+        $content = '<CCACCTFROM><ACCTID>9753648514651548</ACCTID></CCACCTFROM>';
+        $account = $this->Parser->parseCreditcardAccount($content);
+
+        $this->assertInstanceOf('Realejo\Ofx\Banking\CreditcardAccount', $account);
+        $this->assertEquals('9753648514651548', $account->accountId);
+        $this->assertNull($account->accountKey);
+
+        $content = '<CCACCTFROM><ACCTID>
+9753648514651548
+</ACCTID></CCACCTFROM>';
+        $account = $this->Parser->parseCreditcardAccount($content);
+
+        $this->assertInstanceOf('Realejo\Ofx\Banking\CreditcardAccount', $account);
+        $this->assertEquals('9753648514651548', $account->accountId);
+        $this->assertNull($account->accountKey);
+    }
+
     /**
      * Tests Parser->parse()
      */
@@ -121,6 +140,7 @@ class BankingParserTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Realejo\Ofx\Banking\Statement\Response', $response);
         $this->assertEquals('BRL', $response->currency);
 
+        $this->assertNull($response->getCreditcardAccount(), 'não é cartão de crédito');
 
         $bankAccount =  $response->getBankAccount();
         $this->assertInstanceOf('Realejo\Ofx\Banking\BankAccount', $bankAccount);
@@ -156,5 +176,113 @@ class BankingParserTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('651.888', $transaction->referenceNumber);
         $this->assertEquals('Bla Bla Bla', $transaction->memo);
     }
+
+    /**
+     * Tests Parser->parse()
+     */
+    public function testCreditcardResponseParse()
+    {
+        $creditcard = '
+<CREDITCARDMSGSRSV1>
+<CCSTMTTRNRS>
+<TRNUID>1</TRNUID>
+<STATUS>
+<CODE>0</CODE>
+<SEVERITY>INFO</SEVERITY>
+</STATUS>
+<CCSTMTRS>
+<CURDEF>BRL</CURDEF>
+<CCACCTFROM><ACCTID>
+9753648514651548
+</ACCTID></CCACCTFROM>
+<BANKTRANLIST>
+<DTSTART>20140307</DTSTART>
+<DTEND>20141110</DTEND>
+<STMTTRN>
+<TRNTYPE>PAYMENT</TRNTYPE>
+<DTPOSTED>20141027</DTPOSTED>
+<TRNAMT>1234.56</TRNAMT>
+<FITID>2014102749845371082027410000000000</FITID>
+<MEMO>PGTO DEBITO CONTA 666 000007108  200</MEMO>
+</STMTTRN>
+<STMTTRN>
+<TRNTYPE>PAYMENT</TRNTYPE>
+<DTPOSTED>20141017</DTPOSTED>
+<TRNAMT>54.50</TRNAMT>
+<FITID>2014101749845371082027410000000001</FITID>
+<MEMO>Bla bla bla</MEMO>
+</STMTTRN>
+<STMTTRN>
+<TRNTYPE>PAYMENT</TRNTYPE>
+<DTPOSTED>20141019</DTPOSTED>
+<TRNAMT>-89.80</TRNAMT>
+<FITID>2014101949845371082027410000000002</FITID>
+<MEMO>Outro Bla bla bla</MEMO>
+</STMTTRN>
+<STMTTRN>
+<TRNTYPE>PAYMENT</TRNTYPE>
+<DTPOSTED>20141026</DTPOSTED>
+<TRNAMT>-34.30</TRNAMT>
+<FITID>2014102649845371082027410000000008</FITID>
+<MEMO>Mais um bla bla bla</MEMO>
+</STMTTRN>
+<STMTTRN>
+<TRNTYPE>PAYMENT</TRNTYPE>
+<DTPOSTED>20141025</DTPOSTED>
+<TRNAMT>-55.91</TRNAMT>
+<FITID>2014102549845371082027410000000013</FITID>
+<MEMO>E mais um bla bla bla</MEMO>
+</STMTTRN>
+</BANKTRANLIST>
+<LEDGERBAL>
+<BALAMT>-1225.47</BALAMT>
+<DTASOF>20141125</DTASOF>
+</LEDGERBAL>
+</CCSTMTRS>
+</CCSTMTTRNRS>
+</CREDITCARDMSGSRSV1>
+';
+
+        $creditcard = $this->Parser->parse($creditcard);
+        $this->assertInstanceOf('Realejo\Ofx\Banking\Banking', $creditcard);
+        $this->assertInstanceOf('Realejo\Ofx\Banking\Statement', $creditcard->getStatement());
+
+        $response = $creditcard->getStatement()->getResponse();
+        $this->assertInstanceOf('Realejo\Ofx\Banking\Statement\Response', $response);
+        $this->assertEquals('BRL', $response->currency);
+
+        $this->assertNull($response->getBankAccount(), 'não é banco');
+
+        $creditcardAccount =  $response->getCreditcardAccount();
+        $this->assertInstanceOf('Realejo\Ofx\Banking\CreditcardAccount', $creditcardAccount);
+        $this->assertEquals('9753648514651548', $creditcardAccount->accountId);
+        $this->assertNull($creditcardAccount->accountKey);
+
+        $transactionList = $response->getTransactionList();
+        $this->assertInstanceOf('Realejo\Ofx\Banking\TransactionList', $transactionList);
+        $this->assertEquals('2014-03-07', $transactionList->dateStart->format('Y-m-d'));
+        $this->assertEquals('2014-11-10', $transactionList->dateEnd->format('Y-m-d'));
+
+        $this->assertCount(5, $transactionList);
+
+        $transaction = $transactionList[0];
+        $this->assertEquals('PAYMENT', $transaction->type);
+        $this->assertEquals('2014-10-27', $transaction->datePosted->format('Y-m-d'));
+        $this->assertEquals(1234.56, $transaction->amount);
+        $this->assertEquals('2014102749845371082027410000000000', $transaction->fitId);
+        $this->assertNull($transaction->checkNumber);
+        $this->assertNull($transaction->referenceNumber);
+        $this->assertEquals('PGTO DEBITO CONTA 666 000007108  200', $transaction->memo);
+
+        $transaction = $transactionList[4];
+        $this->assertEquals('PAYMENT', $transaction->type);
+        $this->assertEquals('2014-10-25', $transaction->datePosted->format('Y-m-d'));
+        $this->assertEquals(-55.91, $transaction->amount);
+        $this->assertEquals('2014102549845371082027410000000013', $transaction->fitId);
+        $this->assertNull($transaction->checkNumber);
+        $this->assertNull($transaction->referenceNumber);
+        $this->assertEquals('E mais um bla bla bla', $transaction->memo);
+    }
+
 }
 
