@@ -4,6 +4,7 @@ namespace Realejo\Ofx\Banking\Statement;
 use Realejo\Ofx\Banking\BankAccount;
 use Realejo\Ofx\Banking\CreditcardAccount;
 use Realejo\Ofx\Banking\TransactionList;
+use Realejo\Ofx\Banking\Balance;
 
 class Response
 {
@@ -17,6 +18,11 @@ class Response
      * @var string
      */
     public $currency;
+
+    /**
+     * @vr string
+     */
+    public $marketingInfo;
 
     /**
      *
@@ -35,6 +41,10 @@ class Response
      * @var TransactionList
      */
     private $_transactionList;
+
+    private $_ledgerBalance;
+
+    private $_availableBalance;
 
     /**
      *
@@ -96,6 +106,49 @@ class Response
     public function setTransactionList(TransactionList $transactionList)
     {
         $this->_transactionList = $transactionList;
+        return $this;
+    }
+
+    /**
+     *
+     * @return Balance
+     */
+    public function getLedgerBalance()
+    {
+        return $this->_ledgerBalance;
+    }
+
+    /**
+     *
+     * @return Balance
+     */
+    public function getAvailableBalance()
+    {
+        return $this->_availableBalance;
+    }
+
+    /**
+     *
+     * @param Balance $ledgerBalance
+     *
+     * @return \Realejo\Ofx\Banking\Statement\Response
+     *
+     */
+    public function setLedgerBalance(Balance $ledgerBalance)
+    {
+        $this->_ledgerBalance = $ledgerBalance;
+        return $this;
+    }
+
+    /**
+     *
+     * @param Balance $availableBalance
+     *
+     * @return \Realejo\Ofx\Banking\Statement\Response
+     */
+    public function setAvailableBalance(Balance $availableBalance)
+    {
+        $this->_availableBalance = $availableBalance;
         return $this;
     }
 }

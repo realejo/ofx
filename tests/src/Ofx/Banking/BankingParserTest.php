@@ -175,6 +175,14 @@ class BankingParserTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('000000651888', $transaction->checkNumber);
         $this->assertEquals('651.888', $transaction->referenceNumber);
         $this->assertEquals('Bla Bla Bla', $transaction->memo);
+
+        $ledger = $response->getLedgerBalance();
+        $this->assertInstanceOf('Realejo\Ofx\Banking\Balance', $ledger);
+        $this->assertEquals('123456.78', $ledger->amount);
+        $this->assertEquals('2014-11-30', $ledger->dateAsOf->format('Y-m-d'));
+
+        $this->assertNull($response->getAvailableBalance());
+
     }
 
     /**
@@ -282,6 +290,14 @@ class BankingParserTest extends PHPUnit_Framework_TestCase
         $this->assertNull($transaction->checkNumber);
         $this->assertNull($transaction->referenceNumber);
         $this->assertEquals('E mais um bla bla bla', $transaction->memo);
+
+        $ledger = $response->getLedgerBalance();
+        $this->assertInstanceOf('Realejo\Ofx\Banking\Balance', $ledger);
+        $this->assertEquals('-1225.47', $ledger->amount);
+        $this->assertEquals(-1225.47, $ledger->amount);
+        $this->assertEquals('2014-11-25', $ledger->dateAsOf->format('Y-m-d'));
+
+        $this->assertNull($response->getAvailableBalance());
     }
 
 }

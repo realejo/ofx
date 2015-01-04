@@ -94,6 +94,18 @@ class Parser
                     $response->setTransactionList(self::parseTransactions($STMTTRNRS));
                 }
 
+                // Verifica Ledger Balance
+                $LEDGERBAL = $STMTTRNRS->xpath('//LEDGERBAL');
+                if (count($LEDGERBAL) > 0 ) {
+                    $response->setLedgerBalance(self::parseLedgerBalance($STMTTRNRS));
+                }
+
+                // Verifica Available Balance
+                $AVAILBAL = $STMTTRNRS->xpath('//AVAILBAL');
+                if (count($AVAILBAL) > 0 ) {
+                    $response->setAvailableBalance(self::parseAvailableBalance($STMTTRNRS));
+                }
+
                 // Grava o response
                 $Statement->setResponse($response);
 
@@ -154,6 +166,19 @@ class Parser
                 if (count($BANKTRANLIST) == 1) {
                     $response->setTransactionList(self::parseTransactions($STMTTRNRS));
                 }
+
+                // Verifica Ledger Balance
+                $LEDGERBAL = $STMTTRNRS->xpath('//LEDGERBAL');
+                if (count($LEDGERBAL) > 0 ) {
+                    $response->setLedgerBalance(self::parseLedgerBalance($STMTTRNRS));
+                }
+
+                // Verifica Available Balance
+                $AVAILBAL = $STMTTRNRS->xpath('//AVAILBAL');
+                if (count($AVAILBAL) > 0 ) {
+                    $response->setAvailableBalance(self::parseAvailableBalance($STMTTRNRS));
+                }
+
 
                 // Grava o response
                 $Statement->setResponse($response);
@@ -272,5 +297,53 @@ class Parser
             return $transactionList;
 
         } //end if (count($BANKTRANLIST) == 1)
+    }
+
+    /**
+     *
+     * @param string $content
+     * @return \Realejo\Ofx\Banking\Balance
+     */
+    static public function parseLedgerBalance($content)
+    {
+        // Verifica se é um string
+        if (is_string($content)) {
+            $content = \Realejo\Ofx\Parser::makeXML($content);
+        }
+
+        $balance = new Balance();
+
+        $LEDGERBAL = $content->xpath('//LEDGERBAL');
+        if (count($LEDGERBAL) > 0 ) {
+            $LEDGERBAL = $LEDGERBAL[0];
+            $balance->amount   = isset($LEDGERBAL->BALAMT) ? (float) $LEDGERBAL->BALAMT : null;
+            $balance->dateAsOf = isset($LEDGERBAL->DTASOF) ? OfxParser::parseDate($LEDGERBAL->DTASOF) : null;
+        } // end if (count($LEDGERBAL) == 1)
+
+        return $balance;
+    }
+
+    /**
+     *
+     * @param string $content
+     * @return \Realejo\Ofx\Banking\Balance
+     */
+    static public function parseAvailableBalance($content)
+    {
+        // Verifica se é um string
+        if (is_string($content)) {
+            $content = \Realejo\Ofx\Parser::makeXML($content);
+        }
+
+        $balance = new Balance();
+
+        $AVAILBAL = $content->xpath('//AVAILBAL');
+        if (count($AVAILBAL) > 0 ) {
+            $AVAILBAL = $AVAILBAL[0];
+            $balance->amount   = isset($AVAILBAL->BALAMT) ? (float) $AVAILBAL->BALAMT : null;
+            $balance->dateAsOf = isset($AVAILBAL->DTASOF) ? OfxParser::parseDate($AVAILBAL->DTASOF) : null;
+        } // end if (count($AVAILBAL) == 1)
+
+        return $balance;
     }
 }
