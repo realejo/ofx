@@ -1,6 +1,6 @@
-OFX
+Open Financial Exchange (OFX) parser
 ===
 
-Ofx parser and tools
+Parser for version 1.03
 
-follows the definition from http://www.ofx.net/
+Follows the definition from http://www.ofx.net/
