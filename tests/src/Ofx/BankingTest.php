@@ -1,6 +1,6 @@
 <?php
 use Realejo\Ofx\Banking;
-use Realejo\Ofx\Banking\BankStatement;
+use Realejo\Ofx\Banking\Statement;
 
 /**
  * Banking test case.
@@ -42,8 +42,8 @@ class BankingTest extends PHPUnit_Framework_TestCase
      */
     public function testSettersGetters()
     {
-        $this->assertInstanceOf('\Realejo\Ofx\Banking', $this->Banking->setBankStatement(new BankStatement()));
-        $this->assertInstanceOf('\Realejo\Ofx\Banking\BankStatement', $this->Banking->getBankStatement());
+        $this->assertInstanceOf('\Realejo\Ofx\Banking', $this->Banking->setStatement(new Statement()));
+        $this->assertInstanceOf('\Realejo\Ofx\Banking\Statement', $this->Banking->getStatement());
     }
 
     /**
@@ -125,10 +125,10 @@ class BankingTest extends PHPUnit_Framework_TestCase
 
         $banking = $this->Banking->parse($banking);
         $this->assertInstanceOf('Realejo\Ofx\Banking', $banking);
-        $this->assertInstanceOf('Realejo\Ofx\Banking\BankStatement', $banking->getBankStatement());
+        $this->assertInstanceOf('Realejo\Ofx\Banking\Statement', $banking->getStatement());
 
-        $response = $banking->getBankStatement()->getResponse();
-        $this->assertInstanceOf('Realejo\Ofx\Banking\BankStatement\Response', $response);
+        $response = $banking->getStatement()->getResponse();
+        $this->assertInstanceOf('Realejo\Ofx\Banking\Statement\Response', $response);
         $this->assertEquals('BRL', $response->currency);
 
 

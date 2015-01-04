@@ -1,5 +1,5 @@
 <?php
-namespace Realejo\Ofx\Banking\BankStatement;
+namespace Realejo\Ofx\Banking\Statement;
 
 use Realejo\Ofx\Banking\BankAccount;
 use Realejo\Ofx\Banking\TransactionList;
@@ -42,7 +42,7 @@ class Response
      *
      * @param BankAccount $bankAccount
      *
-     * @return \Realejo\Ofx\Banking\BankStatement\Response
+     * @return \Realejo\Ofx\Banking\Statement\Response
      */
     public function setBankAccount(BankAccount $bankAccount)
     {
@@ -63,7 +63,7 @@ class Response
      *
      * @param TransactionList $transactionList
      *
-     * @return \Realejo\Ofx\Banking\BankStatement\Response
+     * @return \Realejo\Ofx\Banking\Statement\Response
      */
     public function setTransactionList(TransactionList $transactionList)
     {

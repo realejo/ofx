@@ -1,25 +1,25 @@
 <?php
 namespace Realejo\Ofx\Banking;
 
-use Realejo\Ofx\Banking\BankStatement\Response as BankStatementResponse;
-use Realejo\Ofx\Banking\BankStatement\Request as BankStatementRequest;
+use Realejo\Ofx\Banking\Statement\Response as StatementResponse;
+use Realejo\Ofx\Banking\Statement\Request as StatementRequest;
 
-class BankStatement
+class Statement
 {
 
     /**
-     * @var BankStatementRequest
+     * @var StatementRequest
      */
     private $_request;
 
     /**
-     * @var BankStatementResponse
+     * @var StatementResponse
      */
     private $_response;
 
     /**
      *
-     * @return BankStatementRequest
+     * @return StatementRequest
      */
     public function getRequest()
     {
@@ -27,7 +27,7 @@ class BankStatement
     }
 
     /**
-     * @return BankStatementResponse
+     * @return StatementResponse
      */
     public function getResponse()
     {
@@ -36,11 +36,11 @@ class BankStatement
 
     /**
      *
-     * @param BankStatementRequest $request
+     * @param StatementRequest $request
      *
-     * @return \Realejo\Ofx\Banking\BankStatement
+     * @return \Realejo\Ofx\Banking\Statement
      */
-    public function setRequest(BankStatementRequest $request)
+    public function setRequest(StatementRequest $request)
     {
         $this->_request = $request;
         return $this;
@@ -48,11 +48,11 @@ class BankStatement
 
     /**
      *
-     * @param BankStatementResponse $response
+     * @param StatementResponse $response
      *
-     * @return \Realejo\Ofx\Banking\BankStatement
+     * @return \Realejo\Ofx\Banking\Statement
      */
-    public function setResponse(BankStatementResponse $response)
+    public function setResponse(StatementResponse $response)
     {
         $this->_response = $response;
         return $this;
@@ -61,7 +61,7 @@ class BankStatement
     /**
      * @param string|SimpleXMLElement $content
      *
-     * @return \Realejo\Ofx\Banking\BankStatement
+     * @return \Realejo\Ofx\Banking\Statement
      */
     public static function parse($content)
     {
@@ -70,7 +70,7 @@ class BankStatement
             $content = \Realejo\Ofx\Parser::makeXML($content);
         }
 
-        $BankStatement = new BankStatement();
+        $Statement = new Statement();
 
         // Verifica se exite a seção do Signon
         $request  = $content->xpath('//SIGNONMSGSRSV1/SONRQ');
@@ -78,7 +78,7 @@ class BankStatement
         if (count($SONRS) == 1) {
             $SONRS = $SONRS[0];
 
-            $response = new BankStatementResponse();
+            $response = new StatementResponse();
 
             $response->statusCode     = (int) $SONRS->STATUS->CODE;
             $response->statusSeverity = $SONRS->STATUS->SEVERITY;
@@ -90,9 +90,9 @@ class BankStatement
             $response->fiOrganization = \Realejo\Ofx\Parser::parseDate($SONRS->FI->ORG);
             $response->fiUniqueId     = \Realejo\Ofx\Parser::parseDate($SONRS->FI->FID);
 
-            $BankStatement->setResponse($response);
+            $Statement->setResponse($response);
         }
 
-        return $BankStatement;
+        return $Statement;
     }
 }

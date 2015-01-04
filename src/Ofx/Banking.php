@@ -1,8 +1,8 @@
 <?php
 namespace Realejo\Ofx;
 
-use Realejo\Ofx\Banking\BankStatement;
-use Realejo\Ofx\Banking\BankStatement\Response as BankStatementResponse;
+use Realejo\Ofx\Banking\Statement;
+use Realejo\Ofx\Banking\Statement\Response as StatementResponse;
 use Realejo\Ofx\Banking\BankAccount;
 use Realejo\Ofx\Banking\TransactionList;
 use Realejo\Ofx\Banking\Transaction;
@@ -12,26 +12,26 @@ class Banking
 
     /**
      *
-     * @var \Realejo\Ofx\Banking\BankStatement
+     * @var \Realejo\Ofx\Banking\Statement
      */
-    private $_bankStatement;
+    private $_Statement;
 
     /**
      *
-     * @return \Realejo\Ofx\Banking\BankStatement
+     * @return \Realejo\Ofx\Banking\Statement
      */
-    public function getBankStatement()
+    public function getStatement()
     {
-        return $this->_bankStatement;
+        return $this->_Statement;
     }
 
     /**
      *
-     * @param \Realejo\Ofx\Banking\BankStatement $bankStatement
+     * @param \Realejo\Ofx\Banking\Statement $Statement
      */
-    public function setBankStatement(BankStatement $bankStatement)
+    public function setStatement(Statement $Statement)
     {
-        $this->_bankStatement = $bankStatement;
+        $this->_Statement = $Statement;
         return $this;
     }
 
@@ -52,7 +52,7 @@ class Banking
         // Verifica se existe o bloco de Banking
         $BANKMSGSRSV1 = $content->xpath('//BANKMSGSRSV1');
         if (count($BANKMSGSRSV1) == 1) {
-            $bankStatement = new BankStatement();
+            $Statement = new Statement();
 
             // Verifica se exite a seção do request Banking
             $STMTTRNRQ = $content->xpath('//BANKMSGSRSV1/STMTTRNRQ');
@@ -65,7 +65,7 @@ class Banking
             if (count($STMTTRNRS) == 1) {
                 $STMTTRNRS = $STMTTRNRS[0];
 
-                $response = new BankStatementResponse();
+                $response = new StatementResponse();
 
                 // Currency
                 $CURDEF = $STMTTRNRS->xpath('//CURDEF');
@@ -138,11 +138,11 @@ class Banking
                 } //end if (count($BANKTRANLIST) == 1)
 
                 // Grava o response
-                $bankStatement->setResponse($response);
+                $Statement->setResponse($response);
 
             } // end if (count($STMTTRNRS) == 1);
 
-            $banking->setBankStatement($bankStatement);
+            $banking->setStatement($Statement);
         } // end if (count($BANKMSGSRSV1) == 1)
 
         return $banking;
