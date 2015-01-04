@@ -16,9 +16,9 @@ class Ofx
 
     // private $_signup;
 
-    // private $_banking;
+    private $_banking;
 
-    // private $_creditcard;
+    private $_creditcard;
 
     // private $_investment;
 
@@ -84,6 +84,50 @@ class Ofx
     public function setSignOn(\Realejo\Ofx\SignOn $signOn)
     {
         $this->_signOn = $signOn;
+
+        return $this;
+    }
+
+    /**
+     *
+     * @return \Realejo\Ofx\Banking\Banking
+     */
+    public function getBanking()
+    {
+        return $this->_banking;
+    }
+
+    /**
+     *
+     * @param \Realejo\Ofx\Banking\Banking $banking
+     *
+     * @return \Realejo\Ofx\Ofx
+     */
+    public function setBanking(\Realejo\Ofx\Banking\Banking $banking)
+    {
+        $this->_banking = $banking;
+
+        return $this;
+    }
+
+    /**
+     *
+     * @return \Realejo\Ofx\Banking\Banking
+     */
+    public function getCreditcard()
+    {
+        return $this->_creditcard;
+    }
+
+    /**
+     *
+     * @param \Realejo\Ofx\Banking\Banking $banking
+     *
+     * @return \Realejo\Ofx\Ofx
+     */
+    public function setCreditcard(\Realejo\Ofx\Banking\Banking $creditcard)
+    {
+        $this->_creditcard = $creditcard;
 
         return $this;
     }

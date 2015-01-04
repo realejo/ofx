@@ -1,6 +1,8 @@
 <?php
 namespace Realejo\Ofx;
 
+use Realejo\Ofx\Banking\Parser as BankingParser;
+
 /**
  * Ofx Parser Library
  */
@@ -8,12 +10,13 @@ class Parser
 {
     /**
      * @param string $file
+     *
      * @return \Realejo\Ofx\Ofx
      */
     public function createFromFile($file)
     {
         if (file_exists($file)) {
-            $this->createFromString(file_get_contents($file));
+            return $this->createFromString(file_get_contents($file));
         } else {
             return false;
         }
@@ -21,11 +24,11 @@ class Parser
 
     /**
      * @param string $content
+     *
      * @return \Realejo\Ofx\Ofx
      */
     public function createFromString($content)
     {
-        $this->originalString = $content;
         $content = explode('<OFX>', $content);
 
         // Cria o objeto Ofx
@@ -35,7 +38,7 @@ class Parser
         $ofx->setHeaders($this->parseHeaders(trim($content[0])));
 
         // Verifica se há mais coisda além do header
-        if (!isset($OFXContent[1])) {
+        if (!isset($content[1])) {
             return $ofx;
         }
 
@@ -54,13 +57,17 @@ class Parser
         // Cria o XML
         $xml = $this->makeXML($xmlContent);
 
-        $ofx->setSignOn(SignOn::parse($xml));
+        $parse = SignOn::parse($xml);
+        if (!empty($parse)) {
+            $ofx->setSignOn($parse);
+        }
 
         //$ofx->setSignup($this->parseSignup());
 
-        $ofx->setBanking(Banking::parse($xml));
-
-        //$ofx->setCreditcard($this->parseCreditcard());
+        $parse = BankingParser::parse($xml);
+        if (!empty($parse)) {
+            $ofx->setBanking($parse);
+        }
 
         //$ofx->setInvestment($this->parseInvestment());
 
@@ -100,9 +107,30 @@ class Parser
      */
     public static function makeXML($content)
     {
+        $content = preg_replace('/>\s+</', '><', $content);
+        $content = preg_replace('/[\s\n]+</', '<', $content);
+        $content = preg_replace('/>[\s\n]+/', '>', $content);
+
+        // Fecha todo mundo
+        $content = preg_replace('/<(\w+?)>([^<]+)/', '<\1>\2</\1>', $content);
+
+        // Remove os duplicados.
+        // Teoricamente pode existir, mas neste foramto de arquivo não.
+        $content = preg_replace('/<\/(\w+?)><\/\1>/', '</\1>', $content);
+
+        // Corrige o content
+        if (strpos($content, '<xml>') === false) {
+            $content = "<xml>$content</xml>";
+        }
+
+        if (strpos($content, '<?') === false) {
+            $content = '<?xml version="1.0"?>' . $content;
+        }
+
         $xml = new \DomDocument();
-        $xml->recover=true;
-        $xml->loadXML($content);
+
+        $xml->loadXML(trim($content));
+
         return simplexml_import_dom($xml);
     }
 

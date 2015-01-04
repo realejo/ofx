@@ -36,26 +36,162 @@ class ParserTest extends PHPUnit_Framework_TestCase
         parent::tearDown();
     }
 
-    /**
-     * Tests Parser->createFromFile()
-     */
-    public function testCreateFromFile()
+    public function testParseXml()
     {
-        // TODO Auto-generated ParserTest->testCreateFromFile()
-        $this->markTestIncomplete("createFromFile test not implemented");
+        $parsed = $this->Parser->makeXML('<TAG>complete</TAG>');
+        $this->assertInstanceOf('\SimpleXMLElement', $parsed);
+        $this->assertEquals('complete', $parsed->TAG);
 
-        $this->Parser->createFromFile(/* parameters */);
+        $parsed = $this->Parser->makeXML('<TAG>  complete  </TAG>');
+        $this->assertInstanceOf('\SimpleXMLElement', $parsed);
+        $this->assertEquals('complete', $parsed->TAG);
+
+        $parsed = $this->Parser->makeXML('  <TAG>complete</TAG>  ');
+        $this->assertInstanceOf('\SimpleXMLElement', $parsed);
+        $this->assertEquals('complete', $parsed->TAG);
+
+        $parsed = $this->Parser->makeXML('  <TAG>
+            complete
+            </TAG>  ');
+        $this->assertInstanceOf('\SimpleXMLElement', $parsed);
+        $this->assertEquals('complete', $parsed->TAG);
+
+        $parsed = $this->Parser->makeXML('<TAG>complete</TAG>');
+        $this->assertInstanceOf('\SimpleXMLElement', $parsed);
+        $this->assertEquals('complete', $parsed->TAG);
+
+        $parsed = $this->Parser->makeXML('<TAG>incomplete');
+        $this->assertInstanceOf('\SimpleXMLElement', $parsed);
+        $this->assertEquals('incomplete', $parsed->TAG);
     }
 
     /**
-     * Tests Parser->createFromString()
+     * Tests Parser->createFromFile()
      */
-    public function testCreateFromString()
+    public function testCreateFromFileChecking1()
     {
-        // TODO Auto-generated ParserTest->testCreateFromString()
-        $this->markTestIncomplete("createFromString test not implemented");
+        $this->assertFalse($this->Parser->createFromFile('não existo'));
 
-        $this->Parser->createFromString(/* parameters */);
+        $assetsRoot = realpath(__DIR__.'/../../assets');
+        $this->assertNotEmpty($assetsRoot);
+
+        $ofx = $this->Parser->createFromFile($assetsRoot .'/CHECKING-1.OFX');
+        $this->assertInstanceOf('Realejo\Ofx\Ofx', $ofx);
+
+        $this->assertNotNull($ofx->getHeaders());
+        $this->assertInstanceOf('Realejo\Ofx\Banking\Banking', $ofx->getBanking());
+        $this->assertInstanceOf('Realejo\Ofx\Banking\Statement', $ofx->getBanking()->getStatement());
+        $this->assertNull($ofx->getBanking()->getStatement()->getRequest());
+        $this->assertInstanceOf('Realejo\Ofx\Banking\Statement\Response', $ofx->getBanking()->getStatement()->getResponse());
+        $this->assertNull($ofx->getBanking()->getStatement()->getResponse()->getCreditcardAccount());
+        $this->assertInstanceOf('Realejo\Ofx\Banking\TransactionList', $ofx->getBanking()->getStatement()->getResponse()->getTransactionList());
+        $this->assertInstanceOf('Realejo\Ofx\Banking\Balance', $ofx->getBanking()->getStatement()->getResponse()->getLedgerBalance());
+        $this->assertNull($ofx->getBanking()->getStatement()->getResponse()->getAvailableBalance());
+
+        $bankAccount = $ofx->getBanking()->getStatement()->getResponse()->getBankAccount();
+        $this->assertInstanceOf('Realejo\Ofx\Banking\BankAccount', $bankAccount);
+        $this->assertEquals('001', $bankAccount->bankId);
+        $this->assertEquals('64864-3', $bankAccount->accountId);
+        $this->assertEquals('CHECKING', $bankAccount->accountType);
+        $this->assertNull($bankAccount->branchId);
+        $this->assertNull($bankAccount->accountKey);
+
+    }
+
+    /**
+     * Tests Parser->createFromFile()
+     */
+    public function testCreateFromFileChecking2()
+    {
+        $this->assertFalse($this->Parser->createFromFile('não existo'));
+
+        $assetsRoot = realpath(__DIR__.'/../../assets');
+        $this->assertNotEmpty($assetsRoot);
+
+        $ofx = $this->Parser->createFromFile($assetsRoot .'/CHECKING-2.OFX');
+        $this->assertInstanceOf('Realejo\Ofx\Ofx', $ofx);
+
+        $this->assertNotNull($ofx->getHeaders());
+        $this->assertInstanceOf('Realejo\Ofx\SignOn', $ofx->getSignOn());
+        $this->assertInstanceOf('Realejo\Ofx\Banking\Banking', $ofx->getBanking());
+        $this->assertInstanceOf('Realejo\Ofx\Banking\Statement', $ofx->getBanking()->getStatement());
+        $this->assertNull($ofx->getBanking()->getStatement()->getRequest());
+        $this->assertInstanceOf('Realejo\Ofx\Banking\Statement\Response', $ofx->getBanking()->getStatement()->getResponse());
+        $this->assertNull($ofx->getBanking()->getStatement()->getResponse()->getCreditcardAccount());
+        $this->assertInstanceOf('Realejo\Ofx\Banking\TransactionList', $ofx->getBanking()->getStatement()->getResponse()->getTransactionList());
+        $this->assertInstanceOf('Realejo\Ofx\Banking\Balance', $ofx->getBanking()->getStatement()->getResponse()->getLedgerBalance());
+        $this->assertNull($ofx->getBanking()->getStatement()->getResponse()->getAvailableBalance());
+
+        $bankAccount = $ofx->getBanking()->getStatement()->getResponse()->getBankAccount();
+        $this->assertInstanceOf('Realejo\Ofx\Banking\BankAccount', $bankAccount);
+        $this->assertEquals('1', $bankAccount->bankId);
+        $this->assertEquals('34676-4', $bankAccount->branchId);
+        $this->assertEquals('73833-9', $bankAccount->accountId);
+        $this->assertEquals('CHECKING', $bankAccount->accountType);
+        $this->assertNull($bankAccount->accountKey);
+    }
+
+    /**
+     * Tests Parser->createFromFile()
+     */
+    public function testCreateFromFileSavings1()
+    {
+        $this->assertFalse($this->Parser->createFromFile('não existo'));
+
+        $assetsRoot = realpath(__DIR__.'/../../assets');
+        $this->assertNotEmpty($assetsRoot);
+
+        $ofx = $this->Parser->createFromFile($assetsRoot .'/SAVINGS-1.OFX');
+        $this->assertInstanceOf('Realejo\Ofx\Ofx', $ofx);
+
+        $this->assertNotNull($ofx->getHeaders());
+        $this->assertInstanceOf('Realejo\Ofx\SignOn', $ofx->getSignOn());
+        $this->assertInstanceOf('Realejo\Ofx\Banking\Banking', $ofx->getBanking());
+        $this->assertInstanceOf('Realejo\Ofx\Banking\Statement', $ofx->getBanking()->getStatement());
+        $this->assertNull($ofx->getBanking()->getStatement()->getRequest());
+        $this->assertInstanceOf('Realejo\Ofx\Banking\Statement\Response', $ofx->getBanking()->getStatement()->getResponse());
+        $this->assertNull($ofx->getBanking()->getStatement()->getResponse()->getCreditcardAccount());
+        $this->assertInstanceOf('Realejo\Ofx\Banking\TransactionList', $ofx->getBanking()->getStatement()->getResponse()->getTransactionList());
+        $this->assertInstanceOf('Realejo\Ofx\Banking\Balance', $ofx->getBanking()->getStatement()->getResponse()->getLedgerBalance());
+        $this->assertNull($ofx->getBanking()->getStatement()->getResponse()->getAvailableBalance());
+
+        $bankAccount = $ofx->getBanking()->getStatement()->getResponse()->getBankAccount();
+        $this->assertInstanceOf('Realejo\Ofx\Banking\BankAccount', $bankAccount);
+        $this->assertEquals('1', $bankAccount->bankId);
+        $this->assertEquals('2168-4', $bankAccount->branchId);
+        $this->assertEquals('21684-9/51', $bankAccount->accountId);
+        $this->assertEquals('SAVINGS', $bankAccount->accountType);
+        $this->assertNull($bankAccount->accountKey);
+    }
+
+    /**
+     * Tests Parser->createFromFile()
+     */
+    public function testCreateFromFileCreditcard1()
+    {
+        $this->assertFalse($this->Parser->createFromFile('não existo'));
+
+        $assetsRoot = realpath(__DIR__.'/../../assets');
+        $this->assertNotEmpty($assetsRoot);
+
+        $ofx = $this->Parser->createFromFile($assetsRoot .'/CREDITCARD-1.OFX');
+        $this->assertInstanceOf('Realejo\Ofx\Ofx', $ofx);
+
+        $this->assertNotNull($ofx->getHeaders());
+        $this->assertInstanceOf('Realejo\Ofx\SignOn', $ofx->getSignOn());
+        $this->assertInstanceOf('Realejo\Ofx\Banking\Banking', $ofx->getBanking());
+        $this->assertInstanceOf('Realejo\Ofx\Banking\Statement', $ofx->getBanking()->getStatement());
+        $this->assertNull($ofx->getBanking()->getStatement()->getRequest());
+        $this->assertInstanceOf('Realejo\Ofx\Banking\Statement\Response', $ofx->getBanking()->getStatement()->getResponse());
+        $this->assertNull($ofx->getBanking()->getStatement()->getResponse()->getBankAccount());
+        $this->assertInstanceOf('Realejo\Ofx\Banking\TransactionList', $ofx->getBanking()->getStatement()->getResponse()->getTransactionList());
+        $this->assertInstanceOf('Realejo\Ofx\Banking\Balance', $ofx->getBanking()->getStatement()->getResponse()->getLedgerBalance());
+        $this->assertNull($ofx->getBanking()->getStatement()->getResponse()->getAvailableBalance());
+
+        $creditcardAccount = $ofx->getBanking()->getStatement()->getResponse()->getCreditcardAccount();
+        $this->assertInstanceOf('Realejo\Ofx\Banking\CreditcardAccount', $creditcardAccount);
+        $this->assertEquals('9753648514651548', $creditcardAccount->accountId);
+        $this->assertNull($creditcardAccount->accountKey);
     }
 
     public function testHeaders()
@@ -127,4 +263,5 @@ class ParserTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('12:00:00', $this->Parser->parseDate('20141031120000.1234[-3:BRT]')->format('H:i:s'));
         $this->assertEquals('12:00:00', $this->Parser->parseDate('20141031120000.1234')->format('H:i:s'));
     }
+
 }

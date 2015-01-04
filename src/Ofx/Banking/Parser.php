@@ -19,7 +19,7 @@ class Parser
      *
      * @return \Realejo\Ofx\Banking\Banking
      */
-    public function parse($content)
+    static public function parse($content)
     {
         // Verifica se é um string
         if (is_string($content)) {
@@ -45,7 +45,7 @@ class Parser
 
     /**
      *
-     * @param string $content
+     * @param string|SimpleXMLElement $content
      *
      * @throws \Exception
      *
@@ -118,7 +118,7 @@ class Parser
 
     /**
      *
-     * @param string $content
+     * @param string|SimpleXMLElement $content
      *
      * @throws \Exception
      *
@@ -192,7 +192,8 @@ class Parser
 
     /**
      *
-     * @param string$content
+     * @param string|SimpleXMLElement $content
+     *
      * @return \Realejo\Ofx\Banking\BankAccount
      */
     static public function parseBankAccount($content)
@@ -219,7 +220,8 @@ class Parser
 
     /**
      *
-     * @param string $content
+     * @param string|SimpleXMLElement $content
+     *
      * @return \Realejo\Ofx\Banking\CreditcardAccount
      */
     static public function parseCreditcardAccount($content)
@@ -241,6 +243,12 @@ class Parser
         return $creditcardAccount;
     }
 
+    /**
+     *
+     * @param string|SimpleXMLElement $content
+     *
+     * @return \Realejo\Ofx\Banking\TransactionList
+     */
     public static function parseTransactions($content)
     {
         // Verifica se é um string
@@ -297,6 +305,8 @@ class Parser
             return $transactionList;
 
         } //end if (count($BANKTRANLIST) == 1)
+
+        return null;
     }
 
     /**
@@ -325,7 +335,8 @@ class Parser
 
     /**
      *
-     * @param string $content
+     * @param string|SimpleXMLElement $content
+     *
      * @return \Realejo\Ofx\Banking\Balance
      */
     static public function parseAvailableBalance($content)
