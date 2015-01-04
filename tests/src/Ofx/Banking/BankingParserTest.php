@@ -1,18 +1,17 @@
 <?php
-use Realejo\Ofx\Banking;
-use Realejo\Ofx\Banking\Statement;
+use Realejo\Ofx\Banking\Parser;
 
 /**
- * Banking test case.
+ * Parser test case.
  */
-class BankingTest extends PHPUnit_Framework_TestCase
+class BankingParserTest extends PHPUnit_Framework_TestCase
 {
 
     /**
      *
-     * @var Banking
+     * @var Parser
      */
-    private $Banking;
+    private $Parser;
 
     /**
      * Prepares the environment before running a test.
@@ -21,9 +20,9 @@ class BankingTest extends PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
-        // TODO Auto-generated BankingTest::setUp()
+        // TODO Auto-generated BankingParserTest::setUp()
 
-        $this->Banking = new Banking(/* parameters */);
+        $this->Parser = new Parser(/* parameters */);
     }
 
     /**
@@ -31,25 +30,16 @@ class BankingTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        // TODO Auto-generated BankingTest::tearDown()
-        $this->Banking = null;
+        // TODO Auto-generated BankingParserTest::tearDown()
+        $this->Parser = null;
 
         parent::tearDown();
     }
 
     /**
-     * Tests Getters ans Setters
+     * Tests Parser->parse()
      */
-    public function testSettersGetters()
-    {
-        $this->assertInstanceOf('\Realejo\Ofx\Banking', $this->Banking->setStatement(new Statement()));
-        $this->assertInstanceOf('\Realejo\Ofx\Banking\Statement', $this->Banking->getStatement());
-    }
-
-    /**
-     * Tests Banking->parse()
-     */
-    public function testParse()
+    public function testBankResponseParse()
     {
         $banking = '<BANKMSGSRSV1>
                         <STMTTRNRS>
@@ -123,8 +113,8 @@ class BankingTest extends PHPUnit_Framework_TestCase
                       </STMTTRNRS>
                     </BANKMSGSRSV1>';
 
-        $banking = $this->Banking->parse($banking);
-        $this->assertInstanceOf('Realejo\Ofx\Banking', $banking);
+        $banking = $this->Parser->parse($banking);
+        $this->assertInstanceOf('Realejo\Ofx\Banking\Banking', $banking);
         $this->assertInstanceOf('Realejo\Ofx\Banking\Statement', $banking->getStatement());
 
         $response = $banking->getStatement()->getResponse();

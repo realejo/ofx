@@ -2,6 +2,7 @@
 namespace Realejo\Ofx\Banking\Statement;
 
 use Realejo\Ofx\Banking\BankAccount;
+use Realejo\Ofx\Banking\CreditcardAccount;
 use Realejo\Ofx\Banking\TransactionList;
 
 class Response
@@ -22,6 +23,12 @@ class Response
      * @var BankAccount
      */
     private $_bankAccount;
+
+    /**
+     *
+     * @var CreditcardAccount
+     */
+    private $_creditcardAccount;
 
     /**
      *
@@ -47,6 +54,27 @@ class Response
     public function setBankAccount(BankAccount $bankAccount)
     {
         $this->_bankAccount = $bankAccount;
+        return $this;
+    }
+
+    /**
+     *
+     * @return CreditcardAccount
+     */
+    public function getCredicardAccount()
+    {
+        return $this->_creditcardAccount;
+    }
+
+    /**
+     *
+     * @param CreditcardAccount $creditcardAccount
+     *
+     * @return \Realejo\Ofx\Banking\Statement\Response
+     */
+    public function setCredicardccount(BankAccount $creditcardAccount)
+    {
+        $this->_creditcardAccount = $creditcardAccount;
         return $this;
     }
 
