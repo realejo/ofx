@@ -1,0 +1,123 @@
+OFXHEADER:100DATA:OFXSGMLVERSION:102SECURITY:NONEENCODING:USASCIICHARSET:1252COMPRESSION:NONEOLDFILEUID:NONENEWFILEUID:NONE<OFX>
+   <SIGNONMSGSRSV1>
+      <SONRS>
+         <STATUS>
+            <CODE>0</CODE>
+            <SEVERITY>INFO</SEVERITY>
+         </STATUS>
+         <DTSERVER>20141230120000[-3:BRT]</DTSERVER>
+         <LANGUAGE>POR</LANGUAGE>
+         <FI>
+            <ORG>Banco do Brasil</ORG>
+            <FID>1</FID>
+         </FI>
+      </SONRS>
+   </SIGNONMSGSRSV1>
+   <BANKMSGSRSV1>
+      <STMTTRNRS>
+         <TRNUID>1</TRNUID>
+         <STATUS>
+            <CODE>0</CODE>
+            <SEVERITY>INFO</SEVERITY>
+         </STATUS>
+         <STMTRS>
+            <CURDEF>BRL</CURDEF>
+            <BANKACCTFROM>
+               <BANKID>1</BANKID>
+               <BRANCHID>34676-4</BRANCHID>
+               <ACCTID>73833-9</ACCTID>
+               <ACCTTYPE>CHECKING</ACCTTYPE>
+            </BANKACCTFROM>
+            <BANKTRANLIST>
+               <DTSTART>20141128120000[-3:BRT]</DTSTART>
+               <DTEND>20141230120000[-3:BRT]</DTEND>
+               <STMTTRN>
+                  <TRNTYPE>OTHER</TRNTYPE>
+                  <DTPOSTED>20141213120000[-3:BRT]</DTPOSTED>
+                  <TRNAMT>3456.67</TRNAMT>
+                  <FITID>2014121305000000</FITID>
+                  <CHECKNUM>855000028594</CHECKNUM>
+                  <REFNUM>661.855.000.028.594</REFNUM>
+                  <MEMO>Transfer�ncia on line</MEMO>
+               </STMTTRN>
+               <STMTTRN>
+                  <TRNTYPE>OTHER</TRNTYPE>
+                  <DTPOSTED>20141213120000[-3:BRT]</DTPOSTED>
+                  <TRNAMT>-16.78</TRNAMT>
+                  <FITID>20141213116490</FITID>
+                  <CHECKNUM>000000182747</CHECKNUM>
+                  <REFNUM>182.747</REFNUM>
+                  <MEMO>Compra com Cart�o</MEMO>
+               </STMTTRN>
+               <STMTTRN>
+                  <TRNTYPE>OTHER</TRNTYPE>
+                  <DTPOSTED>20141214120000[-3:BRT]</DTPOSTED>
+                  <TRNAMT>-330.00</TRNAMT>
+                  <FITID>201412141330000</FITID>
+                  <CHECKNUM>000000850010</CHECKNUM>
+                  <REFNUM>850.010</REFNUM>
+                  <MEMO>Cheque Compensado</MEMO>
+               </STMTTRN>
+               <STMTTRN>
+                  <TRNTYPE>OTHER</TRNTYPE>
+                  <DTPOSTED>20141214120000[-3:BRT]</DTPOSTED>
+                  <TRNAMT>-39.00</TRNAMT>
+                  <FITID>20141214149000</FITID>
+                  <CHECKNUM>000000043694</CHECKNUM>
+                  <REFNUM>43.694</REFNUM>
+                  <MEMO>D�b autorizado em Conta</MEMO>
+               </STMTTRN>
+               <STMTTRN>
+                  <TRNTYPE>OTHER</TRNTYPE>
+                  <DTPOSTED>20141221120000[-3:BRT]</DTPOSTED>
+                  <TRNAMT>-80.80</TRNAMT>
+                  <FITID>20141221180570</FITID>
+                  <CHECKNUM>000000121201</CHECKNUM>
+                  <REFNUM>121.201</REFNUM>
+                  <MEMO>Pagamento de T�tulo</MEMO>
+               </STMTTRN>
+               <STMTTRN>
+                  <TRNTYPE>OTHER</TRNTYPE>
+                  <DTPOSTED>20141222120000[-3:BRT]</DTPOSTED>
+                  <TRNAMT>-500.00</TRNAMT>
+                  <FITID>201412221500000</FITID>
+                  <CHECKNUM>185500052741</CHECKNUM>
+                  <REFNUM>550.185.500.052.741</REFNUM>
+                  <MEMO>Pagto cart�o cr�dito</MEMO>
+               </STMTTRN>
+               <STMTTRN>
+                  <TRNTYPE>OTHER</TRNTYPE>
+                  <DTPOSTED>20141222120000[-3:BRT]</DTPOSTED>
+                  <TRNAMT>-45.31</TRNAMT>
+                  <FITID>20141222145310</FITID>
+                  <CHECKNUM>000000148714</CHECKNUM>
+                  <REFNUM>148.714</REFNUM>
+                  <MEMO>Movimento do Dia</MEMO>
+               </STMTTRN>
+               <STMTTRN>
+                  <TRNTYPE>OTHER</TRNTYPE>
+                  <DTPOSTED>20141224120000[-3:BRT]</DTPOSTED>
+                  <TRNAMT>-300.00</TRNAMT>
+                  <FITID>201412241300000</FITID>
+                  <CHECKNUM>032740009331</CHECKNUM>
+                  <REFNUM>32.740.009.331</REFNUM>
+                  <MEMO>Banco 24 Horas</MEMO>
+               </STMTTRN>
+               <STMTTRN>
+                  <TRNTYPE>OTHER</TRNTYPE>
+                  <DTPOSTED>20141226120000[-3:BRT]</DTPOSTED>
+                  <TRNAMT>10000.00</TRNAMT>
+                  <FITID>20141226010000000</FITID>
+                  <CHECKNUM>201975400418</CHECKNUM>
+                  <REFNUM>48.201.975.400.418</REFNUM>
+                  <MEMO>Dep�sito Online</MEMO>
+               </STMTTRN>
+            </BANKTRANLIST>
+            <LEDGERBAL>
+               <BALAMT>23456.78</BALAMT>
+               <DTASOF>20141230120000[-3:BRT]</DTASOF>
+            </LEDGERBAL>
+         </STMTRS>
+      </STMTTRNRS>
+   </BANKMSGSRSV1>
+</OFX>
