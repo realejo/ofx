@@ -13,10 +13,10 @@ class Parser
      *
      * @return \Realejo\Ofx\Ofx
      */
-    public function createFromFile($file)
+    static public function createFromFile($file)
     {
         if (file_exists($file)) {
-            return $this->createFromString(file_get_contents($file));
+            return self::createFromString(file_get_contents($file));
         } else {
             return false;
         }
@@ -27,7 +27,7 @@ class Parser
      *
      * @return \Realejo\Ofx\Ofx
      */
-    public function createFromString($content)
+    static public function createFromString($content)
     {
         $content = explode('<OFX>', $content);
 
@@ -35,7 +35,7 @@ class Parser
         $ofx = new Ofx();
 
         // Define os headers do OFX
-        $ofx->setHeaders($this->parseHeaders(trim($content[0])));
+        $ofx->setHeaders(self::parseHeaders(trim($content[0])));
 
         // Verifica se há mais coisda além do header
         if (!isset($content[1])) {
@@ -55,7 +55,7 @@ class Parser
         }
 
         // Cria o XML
-        $xml = $this->makeXML($xmlContent);
+        $xml = self::makeXML($xmlContent);
 
         $parse = SignOn::parse($xml);
         if (!empty($parse)) {
@@ -86,7 +86,7 @@ class Parser
         return $ofx;
     }
 
-    public function parseHeaders($content)
+    static public function parseHeaders($content)
     {
         $headers = array();
         $content = explode("\n", trim($content));
