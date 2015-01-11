@@ -13,7 +13,7 @@ class Parser
      *
      * @return \Realejo\Ofx\Ofx
      */
-    static public function createFromFile($file)
+    public static function createFromFile($file)
     {
         if (file_exists($file)) {
             return self::createFromString(file_get_contents($file));
@@ -27,7 +27,7 @@ class Parser
      *
      * @return \Realejo\Ofx\Ofx
      */
-    static public function createFromString($content)
+    public static function createFromString($content)
     {
         $content = explode('<OFX>', $content);
 
@@ -86,7 +86,7 @@ class Parser
         return $ofx;
     }
 
-    static public function parseHeaders($content)
+    public static function parseHeaders($content)
     {
         $headers = array();
         $content = explode("\n", trim($content));
@@ -181,7 +181,7 @@ class Parser
      *
      * @return string
      */
-    static public function parseString($content)
+    public static function parseString($content)
     {
         if (is_string($content)) {
             return trim($content);

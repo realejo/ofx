@@ -19,7 +19,7 @@ class Parser
      *
      * @return \Realejo\Ofx\Banking\Banking
      */
-    static public function parse($content)
+    public static function parse($content)
     {
         // Verifica se é um string
         if (is_string($content)) {
@@ -51,7 +51,7 @@ class Parser
      *
      * @return \Realejo\Ofx\Banking\Statement
      */
-    static public function parseBankMessage($content)
+    public static function parseBankMessage($content)
     {
         // Verifica se é um string
         if (is_string($content)) {
@@ -124,7 +124,7 @@ class Parser
      *
      * @return \Realejo\Ofx\Banking\Statement
      */
-    static public function parseCreditcardMessage($content)
+    public static function parseCreditcardMessage($content)
     {
         // Verifica se é um string
         if (is_string($content)) {
@@ -196,7 +196,7 @@ class Parser
      *
      * @return \Realejo\Ofx\Banking\BankAccount
      */
-    static public function parseBankAccount($content)
+    public static function parseBankAccount($content)
     {
         // Verifica se é um string
         if (is_string($content)) {
@@ -224,7 +224,7 @@ class Parser
      *
      * @return \Realejo\Ofx\Banking\CreditcardAccount
      */
-    static public function parseCreditcardAccount($content)
+    public static function parseCreditcardAccount($content)
     {
         // Verifica se é um string
         if (is_string($content)) {
@@ -314,7 +314,7 @@ class Parser
      * @param string $content
      * @return \Realejo\Ofx\Banking\Balance
      */
-    static public function parseLedgerBalance($content)
+    public static function parseLedgerBalance($content)
     {
         // Verifica se é um string
         if (is_string($content)) {
@@ -339,7 +339,7 @@ class Parser
      *
      * @return \Realejo\Ofx\Banking\Balance
      */
-    static public function parseAvailableBalance($content)
+    public static function parseAvailableBalance($content)
     {
         // Verifica se é um string
         if (is_string($content)) {
