@@ -89,7 +89,9 @@ class Parser
     public static function parseHeaders($content)
     {
         $headers = array();
-        $content = explode("\n", trim($content));
+        $content = str_replace("\n", "\r", trim($content));
+        $content = str_replace("\r\r", "\r", $content);
+        $content = explode("\r", $content);
         foreach($content as $h) {
             list($key,$value) = explode(':', trim($h));
             $headers[trim($key)] = trim($value);

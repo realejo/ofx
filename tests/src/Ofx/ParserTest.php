@@ -214,7 +214,6 @@ class ParserTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('102', $headers['VERSION'], 'campo VERSION correto');
         $this->assertEquals('USASCII', $headers['ENCODING'], 'campo ENCODING correto');
 
-
         $ofx = $this->Parser->createFromString('
                 OFXHEADER:100
                 DATA:OFXSGML
@@ -241,6 +240,41 @@ class ParserTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('102', $ofx->getHeader('VERSION'), 'campo VERSION correto');
         $this->assertEquals('USASCII', $ofx->getHeader('ENCODING'), 'campo ENCODING correto');
 
+    }
+
+    public function testHeadersLineBreak()
+    {
+        $headers = $this->Parser->parseHeaders("OFXHEADER:100\nDATA:OFXSGML");
+        $this->assertNotNull($headers, 'headers definidos');
+        $this->assertInternalType('array', $headers, 'headers são um array');
+        $this->assertArrayHasKey('OFXHEADER',$headers, 'chave VERSION existe');
+        $this->assertArrayHasKey('DATA',$headers, 'chave VERSION existe');
+        $this->assertEquals('100', $headers['OFXHEADER'], 'campo VERSION correto');
+        $this->assertEquals('OFXSGML', $headers['DATA'], 'campo ENCODING correto');
+
+        $headers = $this->Parser->parseHeaders("OFXHEADER:100\rDATA:OFXSGML");
+        $this->assertNotNull($headers, 'headers definidos');
+        $this->assertInternalType('array', $headers, 'headers são um array');
+        $this->assertArrayHasKey('OFXHEADER',$headers, 'chave VERSION existe');
+        $this->assertArrayHasKey('DATA',$headers, 'chave VERSION existe');
+        $this->assertEquals('100', $headers['OFXHEADER'], 'campo VERSION correto');
+        $this->assertEquals('OFXSGML', $headers['DATA'], 'campo ENCODING correto');
+
+        $headers = $this->Parser->parseHeaders("OFXHEADER:100\n\rDATA:OFXSGML");
+        $this->assertNotNull($headers, 'headers definidos');
+        $this->assertInternalType('array', $headers, 'headers são um array');
+        $this->assertArrayHasKey('OFXHEADER',$headers, 'chave VERSION existe');
+        $this->assertArrayHasKey('DATA',$headers, 'chave VERSION existe');
+        $this->assertEquals('100', $headers['OFXHEADER'], 'campo VERSION correto');
+        $this->assertEquals('OFXSGML', $headers['DATA'], 'campo ENCODING correto');
+
+        $headers = $this->Parser->parseHeaders('OFXHEADER:100' . PHP_EOL . 'DATA:OFXSGML');
+        $this->assertNotNull($headers, 'headers definidos');
+        $this->assertInternalType('array', $headers, 'headers são um array');
+        $this->assertArrayHasKey('OFXHEADER',$headers, 'chave VERSION existe');
+        $this->assertArrayHasKey('DATA',$headers, 'chave VERSION existe');
+        $this->assertEquals('100', $headers['OFXHEADER'], 'campo VERSION correto');
+        $this->assertEquals('OFXSGML', $headers['DATA'], 'campo ENCODING correto');
     }
 
     public function testParseDate()
